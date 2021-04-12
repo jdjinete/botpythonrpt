@@ -1,13 +1,14 @@
 from selenium import webdriver
 import time
 import os, time
+from selenium.webdriver.common.by import By
 
 
 options = webdriver.ChromeOptions() 
 options.add_argument("user-data-dir=C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\User Data")
 
 driver = webdriver.Chrome(executable_path=r"chromedriver.exe", chrome_options=options)
-
+#pane-side
 driver.get("https://web.whatsapp.com/")
 
 time.sleep(20)
@@ -37,6 +38,17 @@ time.sleep(20)
 #btn = driver.find_elements_by_xpath("//*[@id='main']/footer/div[1]/div[3]/button")[0]
 #btn.click()
 
+
+
+#...................................................Para saber si hay un mensaje.
+#len(driver.find_elements(By.CLASS_NAME, "_38M1B"))
+
+
+
+#................................................... pararse al comienzo del chat
+
+
+#btn.location_once_scrolled_into_view
 
 
 btn = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div/div/div[2]/div[2]/div[2]/span[1]/div/span")[0]
