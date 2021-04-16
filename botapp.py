@@ -11,6 +11,19 @@ driver = webdriver.Chrome(executable_path=r"chromedriver.exe", chrome_options=op
 #pane-side
 driver.get("https://web.whatsapp.com/")
 
+def thereIsNewMessage(driver):
+    #Pararse al comienzo de los mensajes.
+    listChatsDiv = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div")[0]
+    #Salta al comienzo
+    listChatsDiv.location_once_scrolled_into_view
+    return len(driver.find_elements(By.CLASS_NAME, "_38M1B")) > 0
+
+def getLastMessageInChat():
+    chat = driver.find_elements_by_xpath("/html/body/div/div[1]/div[1]/div[4]/div[1]/div[3]/div/div/div[3]")[0]
+    items = chat.text.split("\n")
+    return items[len(items)-2]
+
+
 time.sleep(20)
 
 # celular  = "573203005638"
@@ -50,11 +63,15 @@ time.sleep(20)
 
 #btn.location_once_scrolled_into_view
 
+#Pararse al comienzo de los mensajes.
+# btn = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div")[0]
+# #Salta al comienzo
+# btn.location_once_scrolled_into_view
 
-btn = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div/div/div[2]/div[2]/div[2]/span[1]/div/span")[0]
-mensajesNuevos = int(btn.text)
-if mensajesNuevos > 0:
-        # Consultar primer item en chats
+# btn = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div/div/div[2]/div[2]/div[2]/span[1]/div/span")[0]
+# mensajesNuevos = int(btn.text)
+if thereIsNewMessage(driver):
+    # Consultar primer item en chats
     btn = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div")[0]
     itemTop = btn.text.split("\n", 1)[0]
 
@@ -66,10 +83,8 @@ if mensajesNuevos > 0:
     # Obtener ultimo mensaje 
     ##btn = driver.find_elements_by_xpath("//*[@id='main']/div[3]/div/div/div[3]/div[12]/div/div/div/div[2]/div/span[1]")[0]
     ##btn = driver.find_elements_by_xpath("//*[@id='main']/div[3]/div/div/div[3]/div[37]/div/div/div/div[1]/div/span[1]/span")[0]
-    btn = driver.find_elements_by_xpath("/html/body/div/div[1]/div[1]/div[4]/div[1]/div[3]/div/div/div[3]")[0]
-    items = btn.text.split("\n")
-    last_message = items[len(items)-2]
-    if last_message == 'A qué horas ?':
+    last_message = getLastMessageInChat()
+    if last_message == 'Clase pa que':
 
         #Escribir mensaje
         btn = driver.find_elements_by_xpath("//*[@id='main']/footer/div[1]/div[2]/div/div[2]")[0]
