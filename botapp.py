@@ -26,13 +26,40 @@ def thereIsNewMessage(driver):
     listChatsDiv = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div")[0]
     #Salta al comienzo
     listChatsDiv.location_once_scrolled_into_view
-    return len(driver.find_elements(By.CLASS_NAME, "_38M1B")) > 0
+    if len(driver.find_elements(By.CLASS_NAME, "_38M1B")) > 0:
+        return True
+    else:
+        contact = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div")[0]
+        contact.click()
+        chats = driver.find_elements_by_class_name("copyable-text")
+        last_chat = chats[len(chats)-2]
+        mensaje = last_chat.text
+        if mensaje=='':
+            return False
+        items = last_chat.find_element_by_xpath("..").find_element_by_xpath("..").get_attribute("data-pre-plain-text").split("] ")
+        items[len(items)-1]
+        name_contact_send_last_message = items[len(items)-1].split(":")[0]
+        if name_contact_send_last_message != "Regalo Para Ti":
+            return True
+        else:
+            return False
 
 def getLastMessageInChat():
     contact = driver.find_elements_by_xpath("//*[@id='pane-side']/div[1]/div/div/div[11]/div/div")[0]
     contact.click()
     chat = driver.find_elements_by_xpath("/html/body/div/div[1]/div[1]/div[4]/div[1]/div[3]/div/div/div[3]")[0]
     items = chat.text.split("\n")
+
+    #obtiene todos los mensajes del chat 
+    #chats =driver.find_elements_by_class_name("copyable-text")
+    #saca el ultimo chat
+    #last_chat = chats[len(chats)-2]
+    # mensaje = last_chat.text
+    #obtiene quien envio el mensa
+    # nt_by_xpath("..").find_element_by_xpath("..").get_attribute("data-pre-plain-text").split("] ").split(":")
+    #items[len(items)-1]
+    #nombre_contacto_que_envia = items[len(items)-1].split(":")[0]
+    
     return items[len(items)-2]
 
 
